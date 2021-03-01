@@ -34,42 +34,42 @@ app.get("/Signup", function(req, res) {
 // handle Sign Up logic
 
 app.post("/Signup", function(req, res) {
-    var name = req.body.name;
-    var email = req.body.email;
-    var password = req.body.password;
-    var rollno = req.body.rollno;
-    var emergencyStatus = req.body.emergencyStatus;
+        var name = req.body.name;
+        var email = req.body.email;
+        var password = req.body.password;
+        var rollno = req.body.rollno;
+        var emergencyStatus = req.body.emergencyStatus;
 
 
-    let student = {
-        name: name,
-        email: email,
-        password: password,
-        rollno: rollno,
-        emergencyStatus: emergencyStatus
-    };
-    const options = {
-        url: `https://desolate-coast-16520.herokuapp.com/SignUpStudent/`,
-        method: 'POST',
-        json: true,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: student
-    };
-    request(options, async function(err, ress, body) {
-        console.log(body);
-        if (body.statusCode === 401) {
-            // rollno already register
-            res.render("Signup");
-        }
-        if (body.statusCode === 200) {
-            //student added
-            res.render("Login");
-        }
-    });
-})
-// show login form 
+        let student = {
+            name: name,
+            email: email,
+            password: password,
+            rollno: rollno,
+            emergencyStatus: emergencyStatus
+        };
+        const options = {
+            url: `https://desolate-coast-16520.herokuapp.com/SignUpStudent/`,
+            method: 'POST',
+            json: true,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: student
+        };
+        request(options, async function(err, ress, body) {
+            console.log(body);
+            if (body.statusCode === 401) {
+                // rollno already register
+                res.render("Signup");
+            }
+            if (body.statusCode === 200) {
+                //student added
+                res.render("Login");
+            }
+        });
+    })
+    // show login form 
 app.get("/AddRoom", function(req, res) {
     res.render("AddRoom");
 })
@@ -80,7 +80,7 @@ app.post("/AddRoom", (req, res) => {
 
 
     let student = {
-        "hostel":req.body.hostel,
+        "hostel": req.body.hostel,
         "number": req.body.roomNumber,
     };
     const options = {
@@ -93,7 +93,7 @@ app.post("/AddRoom", (req, res) => {
         body: student
     };
     request(options, async function(err, ress, body) {
-        
+
         console.log(body);
         if (body.statusCode === 402) {
             // email is not valid
@@ -155,7 +155,13 @@ app.post("/add_Student_To_Waiting", function(req, res) {
 })
 
 app.get("/studentMainPage", function(req, res) {
-    res.render("studentMainPage");
+    if (!req.session.user_id) {
+        res.redirect("Login");
+    }
+    if (req.session.user_id) {
+        res.render("studentMainPage");
+    }
+
 })
 
 // show login form 
@@ -185,7 +191,7 @@ app.post("/Login", (req, res) => {
         body: student
     };
     request(options, async function(err, ress, body) {
-        
+
         console.log(body);
         if (body.statusCode === 402) {
             // email is not valid
@@ -211,6 +217,28 @@ app.post("/Login", (req, res) => {
 
 });
 
+// Queue of students
+
+
+app.post("/List", (req, res) => {
+    if (!req.session.user_id) {
+        res.redirect("Login");
+    }
+    if (req.session.user_id) {
+        var url = "https://desolate-coast-16520.herokuapp.com/getListOfWaitingStudent";
+        console.log(url);
+        request(url, function(error, response, body) {
+            var mv = JSON.parse(body);
+            console.log(mv);
+            res.render("List", { mvd: mv });
+        });
+    }
+});
+
+
+
+
+
 
 
 // logout route 
@@ -228,6 +256,6 @@ function isLoggedIn(req, res, next) {
     res.redirect("/")
 }
 
-app.listen(1099, function(req, res) {
+app.listen(2298, function(req, res) {
     console.log("Client Started !!! ");
 })
