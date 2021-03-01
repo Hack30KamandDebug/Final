@@ -154,7 +154,9 @@ app.post("/add_Student_To_Waiting", function(req, res) {
 
 })
 
-
+app.get("/studentMainPage", function(req, res) {
+    res.render("studentMainPage");
+})
 
 // show login form 
 app.get("/Login", function(req, res) {
@@ -201,8 +203,8 @@ app.post("/Login", (req, res) => {
             });
         }
         if (body.statusCode === 200) {
-            req.session.user_id = user._id;
-            res.render("Student/mainpage");
+            req.session.user_id = email;
+            res.render("studentMainPage");
         }
 
     });
