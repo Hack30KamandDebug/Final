@@ -102,24 +102,49 @@ app.get("/Login", function(req, res) {
 
 // handling login logic
 
-app.post('/Login', (req, res) => {
-    const { email, password } = req.body;
+app.post("/Login", (req, res) => {
 
-    const user_1 = Users_1.find(u => {
-        return u.email === email && password === u.password
+    var email = req.body.email;
+    var password = req.body.password;
+
+
+    let student = {
+        email: email,
+        password: password
+    };
+    const options = {
+        url: `http://localhost:8000/loginStudent/`,
+        method: 'POST',
+        json: true,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: student
+    };
+    request(options, async function(err, res, body) {
+        if (body.statusCode === 402) {
+            // email is not valid
+
+            res.render('Login', {
+                message: 'Email not valid',
+                messageClass: 'alert-danger'
+            });
+        }
+        if (body.statusCode === 403) {
+            //Authentication Failed
+            res.render('Login', {
+                message: 'Authentication Failed',
+                messageClass: 'alert-danger'
+            });
+        }
+        if (body.statusCode === 200) {
+            req.authenticate();
+            res.render("Student/mainpage");
+        }
+
     });
 
-    if (user_1) {
-        req.authenticate();
-        res.render("Student_login_page_view_database");
-    } else {
-        res.render('Login_Student', {
-            message: 'Invalid username or password',
-            messageClass: 'alert-danger'
-        });
-    }
 });
-
 
 
 
