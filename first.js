@@ -2,8 +2,6 @@ var express = require("express"),
     app = express(),
     mongoose = require('mongoose'),
     bodyparser = require("body-parser"),
-    LocalStrategy = require("passport-local"),
-    passportlocalMongoose = require("passport-local-mongoose"),
     request = require("request");
 
 
@@ -43,7 +41,7 @@ app.post("/Signup", function(req, res) {
         emergencyStatus: emergencyStatus
     };
     const options = {
-        url: `http://localhost:8000/SignUpStudent/`,
+        url: `http://localhost:80/SignUpStudent/`,
         method: 'POST',
         json: true,
         headers: {
@@ -51,7 +49,7 @@ app.post("/Signup", function(req, res) {
         },
         body: student
     };
-    request(options, async function(err, res, body) {
+    request(options, async function(err, ress, body) {
         if (body.statusCode === 401) {
             // rollno already register
             res.render("Signup");
@@ -76,7 +74,7 @@ app.post("/add_Student_To_Waiting", function(req, res) {
         emergencyStatus: emergencyStatus
     };
     const options = {
-        url: `http://localhost:8000/StudentAddedInWaiting/`,
+        url: `http://localhost:80/StudentAddedInWaiting/`,
         method: 'POST',
         json: true,
         headers: {
@@ -113,7 +111,7 @@ app.post("/Login", (req, res) => {
         password: password
     };
     const options = {
-        url: `http://localhost:8000/loginStudent/`,
+        url: `http://localhost:80/loginStudent/`,
         method: 'POST',
         json: true,
         headers: {
@@ -121,7 +119,9 @@ app.post("/Login", (req, res) => {
         },
         body: student
     };
-    request(options, async function(err, res, body) {
+    request(options, async function(err, ress, body) {
+        
+        console.log(body);
         if (body.statusCode === 402) {
             // email is not valid
 
