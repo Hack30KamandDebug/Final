@@ -69,6 +69,53 @@ app.post("/Signup", function(req, res) {
         }
     });
 })
+// show login form 
+app.get("/AddRoom", function(req, res) {
+    res.render("AddRoom");
+})
+
+// handling login logic
+
+app.post("/AddRoom", (req, res) => {
+
+
+    let student = {
+        "hostel":req.body.hostel,
+        "number": req.body.roomNumber,
+    };
+    const options = {
+        url: `https://desolate-coast-16520.herokuapp.com/addRoom/`,
+        method: 'POST',
+        json: true,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: student
+    };
+    request(options, async function(err, ress, body) {
+        
+        console.log(body);
+        if (body.statusCode === 402) {
+            // email is not valid
+
+            res.render('Login', {
+                message: 'Email not valid',
+                messageClass: 'alert-danger'
+            });
+        }
+        if (body.statusCode === 402) {
+            //Authentication Failed
+            res.render('AddRoom', {
+                message: 'already exist',
+                messageClass: 'alert-danger'
+            });
+        }
+        if (body.statusCode === 200) {
+            req.authenticate();
+            res.render("Admin/mainpage");
+        }
+    });
+});
 
 
 // handle Sign Up logic
