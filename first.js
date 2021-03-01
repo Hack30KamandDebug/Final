@@ -41,7 +41,7 @@ app.post("/Signup", function(req, res) {
         emergencyStatus: emergencyStatus
     };
     const options = {
-        url: `http://localhost:80/SignUpStudent/`,
+        url: `https://desolate-coast-16520.herokuapp.com/SignUpStudent/`,
         method: 'POST',
         json: true,
         headers: {
@@ -74,7 +74,7 @@ app.post("/add_Student_To_Waiting", function(req, res) {
         emergencyStatus: emergencyStatus
     };
     const options = {
-        url: `http://localhost:80/StudentAddedInWaiting/`,
+        url: `https://desolate-coast-16520.herokuapp.com/StudentAddedInWaiting/`,
         method: 'POST',
         json: true,
         headers: {
@@ -111,7 +111,7 @@ app.post("/Login", (req, res) => {
         password: password
     };
     const options = {
-        url: `http://localhost:80/loginStudent/`,
+        url: `https://desolate-coast-16520.herokuapp.com/loginStudent/`,
         method: 'POST',
         json: true,
         headers: {
