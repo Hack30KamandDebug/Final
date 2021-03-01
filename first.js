@@ -50,6 +50,7 @@ app.post("/Signup", function(req, res) {
         body: student
     };
     request(options, async function(err, ress, body) {
+        console.log(body);
         if (body.statusCode === 401) {
             // rollno already register
             res.render("Signup");
