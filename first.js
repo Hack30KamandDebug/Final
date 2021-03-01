@@ -4,13 +4,23 @@ var express = require("express"),
     bodyparser = require("body-parser"),
     request = require("request");
 
+const session = require("express-session");
 
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static('public'))
 app.set("view engine", "ejs");
 
 
+app.use(require("express-session")({
+    secret: "Something is usual but in secret",
+    resave: false,
+    saveUninitialized: false
+}));
 
+
+app.get("/", function(req, res) {
+    res.render("Signup", { currentUser: req.user });
+})
 
 
 
@@ -19,9 +29,7 @@ app.set("view engine", "ejs");
 app.get("/Signup", function(req, res) {
     res.render("Signup");
 })
-app.get("/", function(req, res) {
-    res.render("Signup", { currentUser: req.user });
-})
+
 
 // handle Sign Up logic
 
@@ -66,32 +74,39 @@ app.post("/Signup", function(req, res) {
 // handle Sign Up logic
 
 app.post("/add_Student_To_Waiting", function(req, res) {
-    var rollno = req.body.rollno;
-    var emergencyStatus = req.body.emergencyStatus;
+    if (!req.session.user_id) {
+        res.redirect("Login");
+    }
+    if (req.session.user_id) {
+        var rollno = req.body.rollno;
+        var emergencyStatus = req.body.emergencyStatus;
 
 
-    let student = {
-        rollno: rollno,
-        emergencyStatus: emergencyStatus
-    };
-    const options = {
-        url: `https://desolate-coast-16520.herokuapp.com/StudentAddedInWaiting/`,
-        method: 'POST',
-        json: true,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: student
-    };
-    request(options, async function(err, res, body) {
-        if (body.statusCode === 401) {
-            // rollno already register
-        }
-        if (body.statusCode === 200) {
-            //student added
-        }
-    });
+        let student = {
+            rollno: rollno,
+            emergencyStatus: emergencyStatus
+        };
+        const options = {
+            url: `http://localhost:8000/StudentAddedInWaiting/`,
+            method: 'POST',
+            json: true,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: student
+        };
+        request(options, async function(err, res, body) {
+            if (body.statusCode === 401) {
+                // rollno already register
+            }
+            if (body.statusCode === 200) {
+                //student added
+            }
+        });
+    }
+
 })
+
 
 
 // show login form 
@@ -139,7 +154,7 @@ app.post("/Login", (req, res) => {
             });
         }
         if (body.statusCode === 200) {
-            req.authenticate();
+            req.session.user_id = user._id;
             res.render("Student/mainpage");
         }
 
