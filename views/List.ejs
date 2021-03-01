@@ -1,0 +1,12 @@
+<h1> Welcome queue of students page!!!</h1>
+
+<h1> waiting List results</h1>
+
+<% for(var i =0; i < Object.keys( mvd ).length; i++) { %>
+    <%= i+1 %>
+        <%= mvd[i]["name"] %>
+            <%= mvd[i]["requestTime"] %>
+                <%= mvd[i]["rollno"] %>
+                    <%= mvd[i]["emergencyStatus"] %>
+
+                        <% } %>
