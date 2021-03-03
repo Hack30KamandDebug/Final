@@ -38,6 +38,7 @@ app.post("/Signup", function(req, res) {
         var email = req.body.email;
         var password = req.body.password;
         var rollno = req.body.rollno;
+        var duplicate = req.body.name;
         var emergencyStatus = req.body.emergencyStatus;
 
 
