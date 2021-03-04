@@ -12,25 +12,29 @@
 
 <body>
 
-    <form class="login rounded" action="/List" method="POST">
+    <form class="login rounded" action="/aList" method="POST">
         <div class="form-group text-center">
-            <button type="submit" class="btn btn-primary">Watch Queue of students</button>
+            <button type="submit" class="btn btn-primary">Watch Queue of students in waiting list</button>
         </div>
     </form>
-
-    <form class="login rounded" action="/sstatsRoom" method="POST">
+    <form class="login rounded" action="/goaddRoom" method="POST">
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary">Add New Room</button>
+        </div>
+    </form>
+    <form class="login rounded" action="/pending" method="POST">
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary">Watch pending request</button>
+        </div>
+    </form>
+    <form class="login rounded" action="/statsRoom" method="POST">
         <div class="form-group text-center">
             <button type="submit" class="btn btn-primary">Room stats </button>
         </div>
     </form>
-
-    <form class="login rounded" action="/Send_Requst" method="POST">
-        <div class="form-group">
-            <label for="username">Confirm rollno</label>
-            <input type="text" class="form-control" id="username" name="rollno" placeholder="Confirm Approving student rollno">
-        </div>
+    <form class="login rounded" action="/gotestResult" method="POST">
         <div class="form-group text-center">
-            <button type="submit" class="btn btn-primary">Send my request to admin</button>
+            <button type="submit" class="btn btn-primary">Update Status of Corona Test </button>
         </div>
     </form>
 
