@@ -4,8 +4,12 @@ var express = require("express"),
     bodyparser = require("body-parser"),
     request = require("request");
 
+const cookieParser = require('cookie-parser');
 const session = require("express-session");
+const crypto = require('crypto');
 
+
+app.use(cookieParser());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static('public'))
 app.set("view engine", "ejs");
@@ -17,6 +21,12 @@ app.use(require("express-session")({
     saveUninitialized: false
 }));
 
+
+const getHashedPassword = (password) => {
+    const sha256 = crypto.createHash('sha256');
+    const hash = sha256.update(password).digest('base64');
+    return hash;
+}
 
 app.get("/", function(req, res) {
     res.render("home", { currentUser: req.user });
@@ -40,11 +50,11 @@ app.post("/Signup", function(req, res) {
     var rollno = req.body.rollno;
     var emergencyStatus = req.body.emergencyStatus;
 
-
+    const hashedPassword = getHashedPassword(password);
     let student = {
         name: name,
         email: email,
-        password: password,
+        password: hashedPassword,
         rollno: rollno,
         emergencyStatus: emergencyStatus
     };
@@ -249,11 +259,11 @@ app.post("/Login", (req, res) => {
 
     var email = req.body.email;
     var password = req.body.password;
-
-
+    const hashedPassword = getHashedPassword(password);
+    
     let student = {
         email: email,
-        password: password
+        password: hashedPassword
     };
     const options = {
         url: `https://desolate-coast-16520.herokuapp.com/loginStudent/`,
@@ -349,11 +359,11 @@ app.post("/loginAdmin", (req, res) => {
 
     var email = req.body.email;
     var password = req.body.password;
-
+    const hashedPassword = getHashedPassword(password);
 
     let student = {
         email: email,
-        password: password
+        password: hashedPassword
     };
     const options = {
         url: `https://desolate-coast-16520.herokuapp.com/loginAdmin/`,
